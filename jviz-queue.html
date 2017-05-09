@@ -8,14 +8,36 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../jviz/jviz.html">
 <link rel="import" href="../jviz-styles/jviz-styles.html">
-<link rel="import" href="../jviz-icons/jviz-icons.html">
+
+<!-- Import queue elements -->
+<link rel="import" href="./jviz-queue-item.html">
 
 <!-- Queue element -->
 <dom-module id="jviz-queue">
   <template>
     <style>
-
+      :host
+      {
+        display: block;
+      }
+      :host .header
+      {
+        display: block;
+        @apply --jviz-heading-3;
+        line-height: 50px !important;
+        height: 50px !important;
+        margin: 0px !important;
+        text-align: center;
+      }
     </style>
+    <template is="dom-if" if="{{ header }}">
+      <div class="header">{{ header }}</div>
+    </template>
+    <div id="tasks">
+      <template is="dom-repeat" items="{{ tasks }}" index-as="index">
+        <jviz-queue-item id$="[[ index ]]" header$="[[ item ]]"></jviz-queue-item>
+      </template>
+    </div>
   </template>
 </dom-module>
 
@@ -28,6 +50,66 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
   jviz_queue.properties = {};
   jviz_queue.properties.visible = { type: Boolean, reflectToAttribute: true, value: true };
   jviz_queue.properties.header = { type: String, reflectToAttribute: true, value: '' };
+  jviz_queue.properties.running = { type: Boolean, reflectToAttribute: true, value: false };
+  jviz_queue.properties.handler = { type: Function };
+  jviz_queue.properties.tasks = { type: Array, value: [] };
+
+  //Run the queue
+  jviz_queue.run = function()
+  {
+    //Save this
+    var self = this;
+
+    //Set the time out
+    //This will give time to initialize all jviz-queue-items elements
+    return jviz.time_out(100, function()
+    {
+      //Check if the queue is running
+      if(self.running === true){ return console.warn('Queue is running'); }
+
+      //Check the number of tasks
+      if(self.tasks.length === 0){ return console.warn('No tasks to run'); }
+
+      //Check for no handler function
+      if(typeof self.handler !== 'function'){ return console.warn('No handler function provider'); }
+
+      //Update the running value
+      self.running = true;
+
+      //Get the tasks elements list
+      var tasks = self.$.tasks.querySelectorAll('jviz-queue-item');
+
+      //Read the tasks recursive
+      var tasks_read = function(index)
+      {
+        //Check the index
+        if(index >= tasks.length)
+        {
+          //Set running as false
+          self.running = false;
+
+          //Display done in console and exit
+          return console.info('Queue completed');
+        }
+
+        //Run this tasks
+        return self.handler(index, tasks[index], function(cont)
+        {
+          //Check the continue value
+          if(typeof cont !== 'boolean'){ var cont = true; }
+
+          //Check no continue value
+          if(cont === false){ return console.warn('Queue aborted'); }
+
+          //Continue with the next task on the queue
+          return tasks_read(index + 1);
+        });
+      };
+
+      //Read and run the tasks
+      return tasks_read(0);
+    });
+  };
 
   //Register the queue element
   Polymer(jviz_queue);
