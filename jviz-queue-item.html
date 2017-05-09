@@ -9,6 +9,7 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
 <link rel="import" href="../jviz/jviz.html">
 <link rel="import" href="../jviz-styles/jviz-styles.html">
 <link rel="import" href="../jviz-icons/jviz-icons.html">
+<link rel="import" href="../jviz-loading/jviz-loading.html">
 
 <!-- Initialize the queue item element -->
 <dom-module id="jviz-queue-item">
@@ -17,8 +18,108 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
       :host
       {
         display: block;
+        padding: 5px;
+        border-radius: 5px;
+        background-color: var(--jviz-grey);
+        margin-top: 0px;
+        margin-bottom: 10px;
       }
+      :host .head
+      {
+        display: block;
+        height: 26px;
+      }
+      :host .head .status
+      {
+        display: none;
+        float: left;
+        height: 26px;
+        border-radius: 5px;
+        margin-right: 10px;
+        transition: all 0.3s;
+      }
+      :host[status="running"] .head .running
+      {
+        display: inline-block;
+        width: 50px;
+        height: 8px;
+        background-color: var(--jviz-grey-1);
+        padding-top: 9px;
+        padding-bottom: 9px;
+      }
+      :host[status="done"] .head .done
+      {
+        display: inline-block;
+        width: 26px;
+        background-color: var(--jviz-green);
+      }
+      :host[status="error"] .head .error
+      {
+        display: inline-block;
+        width: 26px;
+        background-color: var(--jviz-red);
+      }
+      :host[status="warning"] .head .warning
+      {
+        display: inline-block;
+        width: 26px;
+        background-color: var(--jviz-yellow);
+      }
+      :host .head .header
+      {
+        display: inline-block;
+        width: calc(100% - 90px);
+        height: 26px;
+        line-height: 26px;
+        float: left;
+        font-weight: bold;
+        font-size: 14px;
+        cursor: pointer;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      :host .head .arrow
+      {
+        display: inline-block;
+        width: 26px;
+        height: 26px;
+        background-color: var(--jviz-grey-1);
+        border-radius: 5px;
+        float: right;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+      :host[open] .head .arrow { transform: rotate(180deg); }
+      :host .body
+      {
+        display: none;
+        width: calc(100% - 20px);
+        padding: 10px;
+        line-height: 20px;
+      }
+      :host[open] .body { display: block; }
     </style>
+    <div class="head">
+      <div class="status running">
+        <jviz-loading width="8px" color="navy"></jviz-loading>
+      </div>
+      <div class="status done">
+        <jviz-icons icon="done" size="26px" color="white"></jviz-icons>
+      </div>
+      <div class="status error">
+        <jviz-icons icon="close" size="26px" color="white"></jviz-icons>
+      </div>
+      <div class="status warning">
+        <jviz-icons icon="warning" size="26px" color="white"></jviz-icons>
+      </div>
+      <div class="header" on-tap="toggle">{{ header }}</div>
+      <div class="arrow" on-tap="toggle">
+        <jviz-icons icon="chevron_down" size="26px" color="navy"></jviz-icons>
+      </div>
+    </div>
+    <template is="dom-if" if="{{ detail }}">
+      <div class="body">{{ detail }}</div>
+    </template>
   </template>
 </dom-module>
 
@@ -33,6 +134,13 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
   jviz_queue_item.properties.detail = { type: String, reflectToAttribute: false, value: '' };
   jviz_queue_item.properties.status = { type: String, reflectToAttribute: true, value: 'waiting' };
   jviz_queue_item.properties.open = { type: Boolean, reflectToAttribute: true, value: false };
+
+  //Toggle the view
+  jviz_queue_item.toggle = function()
+  {
+    //Toggle the open
+    this.open = !this.open;
+  };
 
   //Register the queue item element
   Polymer(jviz_queue_item);
