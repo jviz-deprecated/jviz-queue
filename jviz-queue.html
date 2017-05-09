@@ -50,8 +50,17 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
   jviz_queue.properties.visible = { type: Boolean, reflectToAttribute: true, value: true };
   jviz_queue.properties.header = { type: String, reflectToAttribute: true, value: '' };
   jviz_queue.properties.running = { type: Boolean, reflectToAttribute: true, value: false };
-  jviz_queue.properties.handler = { type: Function };
   jviz_queue.properties.tasks = { type: Array, value: [] };
+
+  //Add the handler method
+  jviz_queue.handler = function(cb)
+  {
+    //Check for function
+    if(typeof cb !== 'function'){ return; }
+
+    //Save the task handler
+    this._handler = cb;
+  };
 
   //Run the queue
   jviz_queue.run = function()
@@ -70,7 +79,7 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
       if(self.tasks.length === 0){ return console.warn('No tasks to run'); }
 
       //Check for no handler function
-      if(typeof self.handler !== 'function'){ return console.warn('No handler function provider'); }
+      if(typeof self._handler !== 'function'){ return console.warn('No handler function provided'); }
 
       //Update the running value
       self.running = true;
@@ -92,7 +101,7 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
         }
 
         //Run this tasks
-        return self.handler(index, tasks[index], function(cont)
+        return self._handler(index, tasks[index], function(cont)
         {
           //Check the continue value
           if(typeof cont !== 'boolean'){ var cont = true; }
