@@ -33,7 +33,7 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
     el.tasks = [ 'Task1', 'Task2', 'Task3', 'Task4' ];
 
     //Add the task handler
-    el.handler = function(index, item, next)
+    el.handler(function(index, item, next)
     {
       //Display in console the index
       console.log(index);
@@ -46,7 +46,7 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
 
       //Continue
       return next();
-    };
+    });
 
     //Run the tasks
     el.run();
