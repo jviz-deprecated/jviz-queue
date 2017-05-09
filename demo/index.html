@@ -1,0 +1,54 @@
+<!--
+@license
+Copyright (c) 2016 The Jviz Project Authors. All rights reserved.
+The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob/dev/LICENSE
+-->
+
+<!-- Import webcomponents library -->
+<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+<!-- Import select element -->
+<link rel="import" href="../jviz-queue.html">
+
+<!-- Style -->
+<style>
+  html { margin: 20px !important; }
+</style>
+
+<!-- Queue testing element -->
+<jviz-queue id="test" header="Test queue"></jviz-queue>
+
+<!-- Testing script -->
+<script>
+  //Empty element
+  var el = null;
+
+  //Dom ready
+  jviz.dom.ready(function()
+  {
+    //Initialize the queue
+    el = jviz.dom.id('test');
+
+    //Add the tasks items
+    el.tasks = [ 'Task1', 'Task2', 'Task3', 'Task4' ];
+
+    //Add the task handler
+    el.handler = function(index, item, next)
+    {
+      //Display in console the index
+      console.log(index);
+
+      //Set as done
+      item.status = 'done';
+
+      //Set the detail
+      item.detail = 'This is the detail for the task ' + index;
+
+      //Continue
+      return next();
+    };
+
+    //Run the tasks
+    el.run();
+  });
+</script>
