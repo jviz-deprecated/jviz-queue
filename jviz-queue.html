@@ -1,0 +1,34 @@
+<!--
+@license
+Copyright (c) 2016 The Jviz Project Authors. All rights reserved.
+The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob/dev/LICENSE
+-->
+
+<!-- Import dependencies -->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../jviz/jviz.html">
+<link rel="import" href="../jviz-styles/jviz-styles.html">
+<link rel="import" href="../jviz-icons/jviz-icons.html">
+
+<!-- Queue element -->
+<dom-module id="jviz-queue">
+  <template>
+    <style>
+
+    </style>
+  </template>
+</dom-module>
+
+<!-- Queue logic -->
+<script>
+  //Initialize the queue object
+  var jviz_queue = { is: 'jviz-queue' };
+
+  //Initialize the queue properties
+  jviz_queue.properties = {};
+  jviz_queue.properties.visible = { type: Boolean, reflectToAttribute: true, value: true };
+  jviz_queue.properties.header = { type: String, reflectToAttribute: true, value: '' };
+
+  //Register the queue element
+  Polymer(jviz_queue);
+</script>
