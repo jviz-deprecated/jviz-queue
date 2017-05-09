@@ -103,11 +103,8 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
         //Run this tasks
         return self._handler(index, tasks[index], function(cont)
         {
-          //Check the continue value
-          if(typeof cont !== 'boolean'){ var cont = true; }
-
           //Check no continue value
-          if(cont === false)
+          if(typeof cont === 'Boolean' && cont === false)
           {
             //Display queue aborted in console
             console.warn('Queue aborted');
