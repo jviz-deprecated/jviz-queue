@@ -109,6 +109,9 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
           //Check no continue value
           if(typeof cont === 'Boolean' && cont === false)
           {
+            //Set queue running as false
+            self.running = false;
+            
             //Display queue aborted in console
             console.warn('Queue aborted');
 
