@@ -29,30 +29,44 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
     //Initialize the queue
     el = jviz.dom.id('test');
 
+    //Parse element
+    el.parse = function(el, index){ return 'Task ' + index + ': ' + el.name; };
+
     //Add the tasks items
-    el.tasks = [ 'Task1', 'Task2', 'Task3', 'Task4' ];
+    el.tasks = [ { name: 'Task 1', index: 1 }, { name: 'Task 2', index: 2 }, { name: 'Task 3', index: 3 } ];
 
-    //Add the task handler
-    el.handler(function(index, item, next)
+    //Add completed event listener
+    el.addEventListener('queue-completed', function()
     {
-      //Display in console the index
-      console.log(index);
+      //Display in console
 
-      //Set as done
-      item.status = 'done';
+    });
 
+    //Run the tasks
+    //el.run();
+  });
+
+  //Run method
+  var run = function()
+  {
+    //Run the tasks
+    el.run(function(index, item, element, next)
+    {
       //Set the detail
-      item.detail = 'This is the detail for the task ' + index;
+      element.detail = 'This is the detail for the task ' + index;
+
+      //Set item as running
+      element.status = 'running';
 
       //Set the time out
       return jviz.time_out(2000, function()
       {
+        //Set as done
+        element.status = 'done';
+
         //Continue
         return next();
       });
     });
-
-    //Run the tasks
-    el.run();
-  });
+  };
 </script>
