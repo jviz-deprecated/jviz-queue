@@ -34,7 +34,7 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
     </template>
     <div id="tasks">
       <template is="dom-repeat" items="{{ tasks }}" index-as="index">
-        <jviz-queue-item id$="[[ index ]]" header$="[[ value(item, index) ]]"></jviz-queue-item>
+        <jviz-queue-item id$="[[ index ]]" header$="[[ value(item, index, numTasks) ]]"></jviz-queue-item>
       </template>
     </div>
   </template>
@@ -52,13 +52,23 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
   jviz_queue.properties.running = { type: Boolean, reflectToAttribute: true, value: false };
   jviz_queue.properties.parse = { type: Function };
   jviz_queue.properties.numTasks = { type: Number, value: 0 };
-  jviz_queue.properties.tasks = { type: Array, value: [], observer: '_update_tasks' };
+  jviz_queue.properties.tasks = { type: Array, value: [], observer: 'reload' };
 
-  //Add the update tasks observer
-  jviz_queue._update_tasks = function()
+  //Reload method
+  jviz_queue.reload = function()
   {
     //Update the number of tasks
     this.numTasks = this.tasks.length;
+  };
+
+  //Reset method
+  jviz_queue.reset = function()
+  {
+    //Reset the tasks list
+    this.tasks = [];
+
+    //Reload the element
+    this.reload();
   };
 
   //Add the handler method
@@ -83,6 +93,9 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
   {
     //Save this
     var self = this;
+
+    //Reload the element
+    this.reload();
 
     //Set the time out
     //This will give time to initialize all jviz-queue-items elements
