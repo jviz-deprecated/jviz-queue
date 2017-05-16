@@ -109,6 +109,9 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
       //Get the tasks elements list
       var tasks = self.$.tasks.querySelectorAll('jviz-queue-item');
 
+      //Reset all tasks to waiting status
+      tasks.forEach(function(el){ el.status = 'waiting'; });
+
       //Read the tasks recursive
       var tasks_read = function(index)
       {
