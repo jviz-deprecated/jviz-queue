@@ -74,16 +74,6 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
     this.reload();
   };
 
-  //Add the handler method
-  jviz_queue.handler = function(cb)
-  {
-    //Check for function
-    if(typeof cb !== 'function'){ return; }
-
-    //Save the task handler
-    this._handler = cb;
-  };
-
   //Display the task name
   jviz_queue.value = function(item, index)
   {
@@ -92,8 +82,11 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
   };
 
   //Run the queue
-  jviz_queue.run = function()
+  jviz_queue.run = function(cb)
   {
+    //Check the callback element
+    if(typeof cb !== 'function'){ return console.error('No tasks handler method provided. Queue aborted.'); }
+    
     //Save this
     var self = this;
 
