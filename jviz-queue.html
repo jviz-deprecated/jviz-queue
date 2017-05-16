@@ -51,7 +51,15 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
   jviz_queue.properties.header = { type: String, reflectToAttribute: true, value: '' };
   jviz_queue.properties.running = { type: Boolean, reflectToAttribute: true, value: false };
   jviz_queue.properties.parse = { type: Function };
-  jviz_queue.properties.tasks = { type: Array, value: [] };
+  jviz_queue.properties.numTasks = { type: Number, value: 0 };
+  jviz_queue.properties.tasks = { type: Array, value: [], observer: '_update_tasks' };
+
+  //Add the update tasks observer
+  jviz_queue._update_tasks = function()
+  {
+    //Update the number of tasks
+    this.numTasks = this.tasks.length;
+  };
 
   //Add the handler method
   jviz_queue.handler = function(cb)
