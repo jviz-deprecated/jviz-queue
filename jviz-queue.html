@@ -125,7 +125,7 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
           self.running = false;
 
           //Display done in console
-          console.info('Queue completed');
+          //console.info('Queue completed');
 
           //Trigger the completed event
           return self.fire('queue-completed', {});
@@ -144,7 +144,7 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
             self.running = false;
 
             //Display queue aborted in console
-            console.warn('Queue aborted');
+            //console.warn('Queue aborted');
 
             //Trigger the queue aborted event
             return self.fire('queue-aborted', {});
