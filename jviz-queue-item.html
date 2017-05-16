@@ -8,7 +8,7 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../jviz/jviz.html">
 <link rel="import" href="../jviz-styles/jviz-styles.html">
-<link rel="import" href="../jviz-icons/jviz-icons.html">
+<link rel="import" href="../jviz-btn/jviz-btn.html">
 <link rel="import" href="../jviz-loading/jviz-loading.html">
 
 <!-- Initialize the queue item element -->
@@ -31,39 +31,8 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
       }
       :host .head .status
       {
-        display: none;
         float: left;
-        height: 26px;
-        border-radius: 5px;
         margin-right: 10px;
-        transition: all 0.3s;
-      }
-      :host[status="running"] .head .running
-      {
-        display: inline-block;
-        width: 50px;
-        height: 8px;
-        background-color: var(--jviz-grey-1);
-        padding-top: 9px;
-        padding-bottom: 9px;
-      }
-      :host[status="done"] .head .done
-      {
-        display: inline-block;
-        width: 26px;
-        background-color: var(--jviz-green);
-      }
-      :host[status="error"] .head .error
-      {
-        display: inline-block;
-        width: 26px;
-        background-color: var(--jviz-red);
-      }
-      :host[status="warning"] .head .warning
-      {
-        display: inline-block;
-        width: 26px;
-        background-color: var(--jviz-yellow);
       }
       :host .head .header
       {
@@ -101,18 +70,7 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
       :host[open] .body { display: block; }
     </style>
     <div class="head">
-      <div class="status running">
-        <jviz-loading width="8px" color="navy"></jviz-loading>
-      </div>
-      <div class="status done">
-        <jviz-icons icon="done" size="26px" color="white"></jviz-icons>
-      </div>
-      <div class="status error">
-        <jviz-icons icon="close" size="26px" color="white"></jviz-icons>
-      </div>
-      <div class="status warning">
-        <jviz-icons icon="warning" size="26px" color="white"></jviz-icons>
-      </div>
+      <jviz-btn id="status" class="status" height="26px" icon=""></jviz-btn>
       <div class="header" on-tap="toggle">{{ header }}</div>
       <div class="arrow" on-tap="toggle">
         <jviz-icons icon="chevron_down" size="26px" color="navy"></jviz-icons>
@@ -133,8 +91,44 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
   jviz_queue_item.properties = {};
   jviz_queue_item.properties.header = { type: String, reflectToAttribute: false, value: '' };
   jviz_queue_item.properties.detail = { type: String, reflectToAttribute: false, value: '' };
-  jviz_queue_item.properties.status = { type: String, reflectToAttribute: true, value: 'waiting' };
+  jviz_queue_item.properties.status = { type: String, reflectToAttribute: true, value: 'waiting', observer: '_update_status' };
   jviz_queue_item.properties.open = { type: Boolean, reflectToAttribute: true, value: false };
+
+  //Update the status
+  jviz_queue_item._update_status = function()
+  {
+    switch (this.status.toLowerCase())
+    {
+      //Status is running
+      case 'running':
+        this.$.status.color = 'blue';
+        this.$.status.icon = 'star';
+        break;
+
+      //Status is done
+      case 'done':
+        this.$.status.color = 'green';
+        this.$.status.icon = 'done';
+        break;
+
+      //Status is error
+      case 'error':
+        this.$.status.color = 'red';
+        this.$.status.icon = 'close';
+        break;
+
+      //Satus is warning
+      case 'warning':
+        this.$.status.color = 'yellow';
+        this.$.status.icon = 'warning';
+        break;
+
+      //Default case
+      default:
+        this.$.status.color = 'navy';
+        this.$.status.icon = 'star';
+    }
+  };
 
   //Toggle the view
   jviz_queue_item.toggle = function()
