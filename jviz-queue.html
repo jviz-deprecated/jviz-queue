@@ -113,7 +113,7 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
       tasks.forEach(function(el){ el.status = 'waiting'; });
 
       //Emit the queue start event
-      this.fire('queue-started', {});
+      self.fire('queue-started', {});
 
       //Read the tasks recursive
       var tasks_read = function(index)
