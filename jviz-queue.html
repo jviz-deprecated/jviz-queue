@@ -101,7 +101,7 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
       if(self.running === true){ return console.warn('Queue is running'); }
 
       //Check the number of tasks
-      if(self.tasks.length === 0){ return console.warn('No tasks to run'); }
+      if(self.numTasks === 0){ return console.warn('No tasks to run'); }
 
       //Update the running value
       self.running = true;
