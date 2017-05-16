@@ -82,11 +82,11 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
   };
 
   //Run the queue
-  jviz_queue.run = function(cb)
+  jviz_queue.run = function(handler)
   {
     //Check the callback element
-    if(typeof cb !== 'function'){ return console.error('No tasks handler method provided. Queue aborted.'); }
-    
+    if(typeof handler !== 'function'){ return console.error('No tasks handler method provided. Queue aborted.'); }
+
     //Save this
     var self = this;
 
@@ -102,9 +102,6 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
 
       //Check the number of tasks
       if(self.tasks.length === 0){ return console.warn('No tasks to run'); }
-
-      //Check for no handler function
-      if(typeof self._handler !== 'function'){ return console.warn('No handler function provided'); }
 
       //Update the running value
       self.running = true;
@@ -128,8 +125,11 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
           return self.fire('queue:completed', {});
         }
 
+        //Get the task object
+        var item = self.tasks[index];
+
         //Run this tasks
-        return self._handler(index, tasks[index], function(cont)
+        return handler(index, item, tasks[index], function(cont)
         {
           //Check no continue value
           if(typeof cont === 'Boolean' && cont === false)
