@@ -34,7 +34,7 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
     </template>
     <div id="tasks">
       <template is="dom-repeat" items="{{ tasks }}" index-as="index">
-        <jviz-queue-item id$="[[ index ]]" header$="[[ item ]]"></jviz-queue-item>
+        <jviz-queue-item id$="[[ index ]]" header$="[[ value(item, index, size) ]]"></jviz-queue-item>
       </template>
     </div>
   </template>
@@ -50,6 +50,7 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
   jviz_queue.properties.visible = { type: Boolean, reflectToAttribute: true, value: true };
   jviz_queue.properties.header = { type: String, reflectToAttribute: true, value: '' };
   jviz_queue.properties.running = { type: Boolean, reflectToAttribute: true, value: false };
+  jviz_queue.properties.parse = { type: Function };
   jviz_queue.properties.tasks = { type: Array, value: [] };
 
   //Add the handler method
