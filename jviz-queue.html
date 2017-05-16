@@ -34,7 +34,7 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
     </template>
     <div id="tasks">
       <template is="dom-repeat" items="{{ tasks }}" index-as="index">
-        <jviz-queue-item id$="[[ index ]]" header$="[[ value(item, index, size) ]]"></jviz-queue-item>
+        <jviz-queue-item id$="[[ index ]]" header$="[[ value(item, index) ]]"></jviz-queue-item>
       </template>
     </div>
   </template>
@@ -67,7 +67,7 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
   jviz_queue.value = function(item, index)
   {
     //Check the parse method
-    return (this.parse === 'function') ? this.parse(item, index) : item.toString();
+    return (typeof this.parse === 'function') ? this.parse(item, index) : item.toString();
   };
 
   //Run the queue
