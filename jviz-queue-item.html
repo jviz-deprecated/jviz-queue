@@ -137,6 +137,35 @@ The Jviz Project is under the MIT License. See https://github.com/jviz/jviz/blob
     this.open = !this.open;
   };
 
+  //Set a status value
+  jviz_queue_item.set_status = function(status, message)
+  {
+    //Set the item status
+    this.status = status.trim().toLowerCase();
+
+    //Check the status message
+    if(typeof message === 'string')
+    {
+      //Set the detail message
+      this.detail = message.trim();
+    }
+  };
+
+  //Set a done status
+  jviz_queue_item.set_done = function(message){ return this.set_status('done', message); };
+
+  //Set an error status
+  jviz_queue_item.set_error = function(message){ return this.set_status('error', message); };
+
+  //Set a warning status
+  jviz_queue_item.set_warning = function(message){ return this.set_status('warning', message); };
+
+  //Set a running status
+  jviz_queue_item.set_running = function(message){ return this.set_status('running', message); };
+
+  //Set a waiting status
+  jviz_queue_item.set_waiting = function(message){ return this.set_status('waiting', message); };
+
   //Register the queue item element
   Polymer(jviz_queue_item);
 </script>
